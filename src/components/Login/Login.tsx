@@ -1,4 +1,6 @@
-import * as React from 'react'
+import * as React from 'react';
+import { Button, Icon } from 'antd';
+// import axios from '@/src/axios/axios.ts';
 // import {
 //   BrowserRouter as Router,
 //   Route,
@@ -6,8 +8,15 @@ import * as React from 'react'
 //   RouteComponentProps
 // } from 'react-router-dom'
 
-function Login() {
-  return <div>login</div>
+class Login extends React.Component {
+  render() {
+    return (
+      <div>
+        <Icon type="check-circle" />
+        <Button>123</Button>
+      </div>
+    );
+  }
 }
 
-export default Login
+export default Login;

@@ -1,17 +1,15 @@
-import * as React from 'react'
-import { Button } from 'antd'
+import * as React from 'react';
+import { Button } from 'antd';
 
 class Index extends React.Component<any> {
   constructor(props: any) {
-    super(props)
+    super(props);
   }
   login() {
-    this.props.history.push('/login')
-    console.log(1)
+    this.props.history.push('/login');
   }
   register() {
-    this.props.history.push('/register')
-    console.log(2)
+    this.props.history.push('/register');
   }
   render() {
     return (
@@ -20,8 +18,8 @@ class Index extends React.Component<any> {
         <Button onClick={() => this.login()}>login</Button>
         <Button onClick={() => this.register()}>register</Button>
       </div>
-    )
+    );
   }
 }
 
-export default Index
+export default Index;
