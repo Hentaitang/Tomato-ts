@@ -1,4 +1,5 @@
 import axios from 'axios';
+import history from './history';
 
 const appId: string = 'sDRa5781dPR27ams6REyKzhN';
 const appSecret: string = 'vBaxfiVuXcPuZY8fk1SjmcaZ';
@@ -15,12 +16,12 @@ const instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(
   function(config) {
+    // Do something before request is sent
     const xToken = localStorage.getItem('x-token');
     if (xToken) {
       const headerKey = 'Authorization';
       config.headers[headerKey] = `Bearer ${xToken}`;
     }
-    // Do something before request is sent
     return config;
   },
   function(error) {
@@ -32,8 +33,8 @@ instance.interceptors.request.use(
 // Add a response interceptor
 instance.interceptors.response.use(
   function(response) {
-    const tokenKey = 'X-token';
-    const xToken = response.headers[tokenKey];
+    const tokenKey: string = 'x-token';
+    const xToken: string = response.headers[tokenKey];
     if (xToken) {
       localStorage.setItem('x-token', xToken);
     }
@@ -41,6 +42,10 @@ instance.interceptors.response.use(
   },
   function(error) {
     // Do something with response error
+    if (error.response.status === 401) {
+      console.log('重定向');
+      history.push('/login');
+    }
     return Promise.reject(error);
   }
 );

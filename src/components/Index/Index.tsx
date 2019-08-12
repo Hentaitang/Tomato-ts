@@ -1,11 +1,16 @@
 import * as React from 'react';
 import { Button } from 'antd';
+import axios from 'src/axios/axios';
 
 class Index extends React.Component<any> {
   constructor(props: any) {
     super(props);
   }
+  async componentWillMount() {
+    await axios.get('me');
+  }
   login() {
+    localStorage.setItem('x-token', '');
     this.props.history.push('/login');
   }
   register() {
@@ -15,8 +20,7 @@ class Index extends React.Component<any> {
     return (
       <div>
         index
-        <Button onClick={() => this.login()}>login</Button>
-        <Button onClick={() => this.register()}>register</Button>
+        <Button onClick={() => this.login()}>登出</Button>
       </div>
     );
   }

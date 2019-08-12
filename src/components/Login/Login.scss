@@ -1,0 +1,25 @@
+.Login {
+  width: 300px;
+  margin: 0 auto;
+  padding: 30px 0;
+  header {
+    p {
+      color: #ff5a44;
+      font-weight: bold;
+      font-size: 20px;
+      text-align: center;
+      padding-bottom: 30px;
+    }
+    h1 {
+      text-align: center;
+      font-size: 42px;
+      font-weight: 400;
+    }
+  }
+  .loginBtn {
+    width: 100%;
+  }
+  .toRegister {
+    color: #ff5a44;
+  }
+}
