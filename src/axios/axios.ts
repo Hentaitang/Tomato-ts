@@ -43,7 +43,6 @@ instance.interceptors.response.use(
   function(error) {
     // Do something with response error
     if (error.response.status === 401) {
-      console.log('重定向');
       history.push('/login');
     }
     return Promise.reject(error);
