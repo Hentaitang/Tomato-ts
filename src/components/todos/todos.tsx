@@ -1,7 +1,6 @@
 import TodoInput from './todoInput';
 import TodoItem from './todoItem';
 import * as React from 'react';
-import axios from 'src/axios/axios';
 import './todos.scss';
 import { Button, Icon } from 'antd';
 
@@ -19,20 +18,9 @@ interface StateType {
 class Todos extends React.Component<TodoProps, StateType> {
   constructor(props: TodoProps) {
     super(props);
-    this.addTodo = this.addTodo.bind(this);
     this.state = {
       showCompleted: false
     };
-  }
-  async addTodo(description: string) {
-    try {
-      const res = await axios.post('todos', {
-        description
-      });
-      this.props.addTodoList(res.data.resource);
-    } catch (err) {
-      console.log(err);
-    }
   }
   unDeleteList() {
     return this.props.todoList.filter(l => !l.deleted);
@@ -51,7 +39,7 @@ class Todos extends React.Component<TodoProps, StateType> {
     const { showCompleted } = this.state;
     return (
       <div className="todoList">
-        <TodoInput addTodo={this.addTodo} />
+        <TodoInput />
         <div className="item">
           {this.unCompeleteList().map(n => {
             return (

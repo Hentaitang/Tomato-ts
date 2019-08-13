@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Menu, Dropdown, Icon } from 'antd';
 import axios from 'src/axios/axios';
 import history from 'src/axios/history';
-import './index.scss';
+import './Home.scss';
 import Todos from 'src/components/todos/todos';
 
 interface StateType {
@@ -37,7 +37,7 @@ function login(e: any) {
   }
 }
 
-class Index extends React.Component<any, StateType> {
+class Home extends React.Component<any, StateType> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -118,4 +118,4 @@ class Index extends React.Component<any, StateType> {
   }
 }
 
-export default Index;
+export default Home;
