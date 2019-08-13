@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Checkbox, Icon } from 'antd';
+import className from 'classnames';
 
 interface TodoItemProps {
   id: number;
@@ -38,7 +39,9 @@ class TodoItem extends React.Component<TodoItemProps, StateType> {
     const { inputValue } = this.state;
 
     const Text = (
-      <span onDoubleClick={() => changeEditing(id)}>{description}</span>
+      <span className="text" onDoubleClick={() => changeEditing(id)}>
+        {description}
+      </span>
     );
 
     const Editing = (
@@ -54,18 +57,25 @@ class TodoItem extends React.Component<TodoItemProps, StateType> {
         <div className="iconWrapper">
           <Icon
             type="enter"
+            title="按回车键提交"
             onClick={() => this.updateDescription({ keyCode: 13 })}
           />
           <Icon
             type="delete"
             theme="filled"
+            title="删除"
             onClick={() => updateTodos(id, { deleted: true })}
           />
         </div>
       </div>
     );
+    const itemCLass = className({
+      todoItem: true,
+      edited: edit,
+      completed
+    });
     return (
-      <div>
+      <div className={itemCLass}>
         <Checkbox
           onChange={e => updateTodos(id, { completed: e.target.checked })}
           checked={completed}

@@ -1,0 +1,59 @@
+.todoList {
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 5px;
+  .todoInput {
+    padding-bottom: 16px;
+  }
+  .changeBtn {
+    margin: 8px 0;
+  }
+  .item {
+    .todoItem {
+      border-bottom: 1px solid #ddd;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      &:first-child {
+        border-top: 1px solid #ddd;
+      }
+      &:hover {
+        background: rgba(0, 0, 0, 0.12);
+      }
+      &.edited {
+        background-color: #f7edb8;
+      }
+      &.completed .text {
+        text-decoration: line-through;
+        opacity: 0.5;
+      }
+      .ant-checkbox-inner {
+        border-radius: 50%;
+      }
+      .text {
+        padding: 0 8px;
+        flex: 1;
+      }
+      .editing {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 8px;
+        input {
+          flex: 1;
+          border: 0;
+          padding: 0;
+          outline: none;
+          background: transparent;
+        }
+        .iconWrapper {
+          i {
+            padding-left: 8px;
+            color: #a9a9a9;
+          }
+        }
+      }
+    }
+  }
+}

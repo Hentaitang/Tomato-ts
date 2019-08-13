@@ -2,6 +2,8 @@ import TodoInput from './todoInput';
 import TodoItem from './todoItem';
 import * as React from 'react';
 import axios from 'src/axios/axios';
+import './todos.scss';
+import { Button, Icon } from 'antd';
 
 interface TodoProps {
   todoList: any[];
@@ -10,10 +12,17 @@ interface TodoProps {
   changeEditing: (id: number) => void;
 }
 
-class Todos extends React.Component<TodoProps> {
+interface StateType {
+  showCompleted: boolean;
+}
+
+class Todos extends React.Component<TodoProps, StateType> {
   constructor(props: TodoProps) {
     super(props);
     this.addTodo = this.addTodo.bind(this);
+    this.state = {
+      showCompleted: false
+    };
   }
   async addTodo(description: string) {
     try {
@@ -25,21 +34,56 @@ class Todos extends React.Component<TodoProps> {
       console.log(err);
     }
   }
+  unDeleteList() {
+    return this.props.todoList.filter(l => !l.deleted);
+  }
+  compeleteList() {
+    return this.unDeleteList().filter(l => l.completed);
+  }
+  unCompeleteList() {
+    return this.unDeleteList().filter(l => !l.completed);
+  }
+  changeShow() {
+    this.setState({ showCompleted: !this.state.showCompleted });
+  }
   render() {
-    const { todoList, updateTodos, changeEditing } = this.props;
+    const { updateTodos, changeEditing } = this.props;
+    const { showCompleted } = this.state;
     return (
-      <div>
+      <div className="todoList">
         <TodoInput addTodo={this.addTodo} />
-        {todoList.map(n => {
-          return (
-            <TodoItem
-              {...n}
-              key={n.id}
-              updateTodos={updateTodos}
-              changeEditing={changeEditing}
-            />
-          );
-        })}
+        <div className="item">
+          {this.unCompeleteList().map(n => {
+            return (
+              <TodoItem
+                {...n}
+                key={n.id}
+                updateTodos={updateTodos}
+                changeEditing={changeEditing}
+              />
+            );
+          })}
+        </div>
+        <Button className="changeBtn" onClick={() => this.changeShow()}>
+          {showCompleted ? <Icon type="down" /> : <Icon type="right" />}
+          最近完成任务
+        </Button>
+        <div className="item">
+          {showCompleted ? (
+            this.compeleteList().map(n => {
+              return (
+                <TodoItem
+                  {...n}
+                  key={n.id}
+                  updateTodos={updateTodos}
+                  changeEditing={changeEditing}
+                />
+              );
+            })
+          ) : (
+            <span />
+          )}
+        </div>
       </div>
     );
   }
