@@ -5,7 +5,9 @@ import axios from 'src/axios/axios';
 
 interface TodoProps {
   todoList: any[];
-  addTodoList: any;
+  addTodoList: (params: any) => void;
+  updateTodos: (id: number, params: any) => void;
+  changeEditing: (id: number) => void;
 }
 
 class Todos extends React.Component<TodoProps> {
@@ -24,12 +26,19 @@ class Todos extends React.Component<TodoProps> {
     }
   }
   render() {
-    const { todoList } = this.props;
+    const { todoList, updateTodos, changeEditing } = this.props;
     return (
       <div>
         <TodoInput addTodo={this.addTodo} />
         {todoList.map(n => {
-          return <TodoItem {...n} key={n.id} />;
+          return (
+            <TodoItem
+              {...n}
+              key={n.id}
+              updateTodos={updateTodos}
+              changeEditing={changeEditing}
+            />
+          );
         })}
       </div>
     );
