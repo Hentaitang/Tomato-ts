@@ -4,6 +4,7 @@ import axios from 'src/axios/axios';
 import history from 'src/axios/history';
 import './Home.scss';
 import Todos from 'src/components/todos/todos';
+import Tomatoes from 'src/components/Tomatoes/Tomatoes';
 import { connect } from 'react-redux';
 import { changeLoading, initTodo } from '../../redux/actions';
 
@@ -69,6 +70,7 @@ class Home extends React.Component<any, StateType> {
           </Dropdown>
         </header>
         <main>
+          <Tomatoes />
           <Todos />
         </main>
       </div>
