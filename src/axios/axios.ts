@@ -42,9 +42,14 @@ instance.interceptors.response.use(
   },
   function(error) {
     // Do something with response error
-    if (error.response.status === 401) {
-      history.push('/login');
+    try {
+      if (error.response.status === 401) {
+        history.push('/login');
+      }
+    } catch {
+      console.log(error);
     }
+
     return Promise.reject(error);
   }
 );

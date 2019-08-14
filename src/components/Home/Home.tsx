@@ -4,17 +4,11 @@ import axios from 'src/axios/axios';
 import history from 'src/axios/history';
 import './Home.scss';
 import Todos from 'src/components/todos/todos';
+import { connect } from 'react-redux';
+import { changeLoading, initTodo } from '../../redux/actions';
 
 interface StateType {
   user: any;
-  todoList: any[];
-}
-
-interface EditParams {
-  description?: string;
-  completed?: boolean;
-  deleted?: boolean;
-  extra?: object;
 }
 
 const menu = (
@@ -41,56 +35,25 @@ class Home extends React.Component<any, StateType> {
   constructor(props: any) {
     super(props);
     this.state = {
-      user: {},
-      todoList: []
+      user: {}
     };
-    this.addTodoList = this.addTodoList.bind(this);
-    this.updateTodos = this.updateTodos.bind(this);
-    this.changeEditing = this.changeEditing.bind(this);
   }
 
   async componentDidMount() {
     try {
+      this.props.changeLoading(true);
       const check = await axios.get('me');
-      const list = await axios.get('todos');
-      const todoList = list.data.resources.map((t: any) => {
+      const todos = await axios.get('todos');
+      const todoList = todos.data.resources.map((t: any) => {
         return { ...t, edit: false };
       });
-      this.setState({ user: check.data, todoList });
+      this.props.initTodo(todoList);
+      this.setState({ user: check.data });
+      this.props.changeLoading(false);
     } catch (err) {
+      this.props.changeLoading(false);
       console.log(err);
     }
-  }
-
-  changeEditing(id: number) {
-    const todoList = this.state.todoList.map(t => {
-      if (t.id === id) {
-        return { ...t, edit: true };
-      } else {
-        return { ...t, edit: false };
-      }
-    });
-    this.setState({ ...this.state, todoList });
-  }
-
-  addTodoList(value: string) {
-    this.state.todoList.unshift(value);
-    this.setState({
-      ...this.state,
-      todoList: this.state.todoList
-    });
-  }
-
-  async updateTodos(id: number, params: EditParams) {
-    const res = await axios.put(`todos/${id}`, params);
-    const newList = this.state.todoList.map(l => {
-      if (l.id === id) {
-        return { ...res.data.resource, edit: false };
-      } else {
-        return l;
-      }
-    });
-    this.setState({ ...this.state, todoList: newList });
   }
 
   render() {
@@ -106,16 +69,19 @@ class Home extends React.Component<any, StateType> {
           </Dropdown>
         </header>
         <main>
-          <Todos
-            todoList={this.state.todoList}
-            addTodoList={this.addTodoList}
-            updateTodos={this.updateTodos}
-            changeEditing={this.changeEditing}
-          />
+          <Todos />
         </main>
       </div>
     );
   }
 }
 
-export default Home;
+const mapDispatchToProps = {
+  changeLoading,
+  initTodo
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Home);

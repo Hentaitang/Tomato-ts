@@ -3,6 +3,8 @@ import { Button, Icon, Input, message, Form } from 'antd';
 import axios from 'src/axios/axios';
 import './Login.scss';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { changeLoading } from '../../redux/actions';
 
 interface StateType {
   confirmDirty: boolean;
@@ -17,15 +19,16 @@ class Login extends React.Component<any, StateType> {
   async login() {
     const { account, password } = this.props.form.getFieldsValue();
     try {
+      this.props.changeLoading(true);
       await axios.post('sign_in/user', {
         account,
         password
       });
+      this.props.changeLoading(false);
       message.success('登录成功');
-      setTimeout(() => {
-        this.props.history.push('/');
-      }, 1000);
+      this.props.history.push('/');
     } catch (err) {
+      this.props.changeLoading(false);
       message.error('登录失败，用户名与密码不匹配');
       console.log(err);
     }
@@ -106,4 +109,10 @@ class Login extends React.Component<any, StateType> {
 
 const WrappedLogin = Form.create({ name: 'login' })(Login);
 
-export default WrappedLogin;
+const mapDispatchToProps = {
+  changeLoading
+};
+export default connect(
+  null,
+  mapDispatchToProps
+)(WrappedLogin);

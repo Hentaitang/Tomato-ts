@@ -3,6 +3,8 @@ import { Button, Icon, Input, message, Form } from 'antd';
 import axios from 'src/axios/axios';
 import './Register.scss';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { changeLoading } from '../../redux/actions';
 
 interface StateType {
   confirmDirty: boolean;
@@ -21,16 +23,17 @@ class Register extends React.Component<any, StateType> {
       passwordConfirmation
     } = this.props.form.getFieldsValue();
     try {
+      this.props.changeLoading(true);
       await axios.post('sign_up/user', {
         account,
         password,
         password_confirmation: passwordConfirmation
       });
+      this.props.changeLoading(false);
       message.success('注册成功');
-      setTimeout(() => {
-        this.props.history.push('/');
-      }, 1000);
+      this.props.history.push('/');
     } catch (err) {
+      this.props.changeLoading(false);
       message.error('注册失败，已存在相同用户');
       console.log(err);
     }
@@ -143,5 +146,11 @@ class Register extends React.Component<any, StateType> {
 }
 
 const WrappedRegister = Form.create({ name: 'register' })(Register);
+const mapDispatchToProps = {
+  changeLoading
+};
 
-export default WrappedRegister;
+export default connect(
+  null,
+  mapDispatchToProps
+)(WrappedRegister);

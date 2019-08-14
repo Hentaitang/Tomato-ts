@@ -3,12 +3,10 @@ import TodoItem from './todoItem';
 import * as React from 'react';
 import './todos.scss';
 import { Button, Icon } from 'antd';
+import { connect } from 'react-redux';
 
 interface TodoProps {
   todoList: any[];
-  addTodoList: (params: any) => void;
-  updateTodos: (id: number, params: any) => void;
-  changeEditing: (id: number) => void;
 }
 
 interface StateType {
@@ -35,21 +33,13 @@ class Todos extends React.Component<TodoProps, StateType> {
     this.setState({ showCompleted: !this.state.showCompleted });
   }
   render() {
-    const { updateTodos, changeEditing } = this.props;
     const { showCompleted } = this.state;
     return (
       <div className="todoList">
         <TodoInput />
         <div className="item">
           {this.unCompeleteList().map(n => {
-            return (
-              <TodoItem
-                {...n}
-                key={n.id}
-                updateTodos={updateTodos}
-                changeEditing={changeEditing}
-              />
-            );
+            return <TodoItem {...n} key={n.id} />;
           })}
         </div>
         <Button className="changeBtn" onClick={() => this.changeShow()}>
@@ -59,14 +49,7 @@ class Todos extends React.Component<TodoProps, StateType> {
         <div className="item">
           {showCompleted ? (
             this.compeleteList().map(n => {
-              return (
-                <TodoItem
-                  {...n}
-                  key={n.id}
-                  updateTodos={updateTodos}
-                  changeEditing={changeEditing}
-                />
-              );
+              return <TodoItem {...n} key={n.id} />;
             })
           ) : (
             <span />
@@ -77,4 +60,13 @@ class Todos extends React.Component<TodoProps, StateType> {
   }
 }
 
-export default Todos;
+const mapStateToProps = (state: any) => {
+  return {
+    todoList: state.Todos
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(Todos);
