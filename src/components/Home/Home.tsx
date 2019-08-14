@@ -6,7 +6,7 @@ import './Home.scss';
 import Todos from 'src/components/todos/todos';
 import Tomatoes from 'src/components/Tomatoes/Tomatoes';
 import { connect } from 'react-redux';
-import { changeLoading, initTodo } from '../../redux/actions';
+import { changeLoading, initTodo, initTomatoes } from '../../redux/actions';
 
 interface StateType {
   user: any;
@@ -45,12 +45,14 @@ class Home extends React.Component<any, StateType> {
       this.props.changeLoading(true);
       const check = await axios.get('me');
       const todos = await axios.get('todos');
+      const tomatos = await axios.get('tomatoes');
       const todoList = todos.data.resources.map((t: any) => {
         return { ...t, edit: false };
       });
       this.props.initTodo(todoList);
-      this.setState({ user: check.data });
+      this.props.initTomatoes(tomatos.data.resources);
       this.props.changeLoading(false);
+      this.setState({ user: check.data });
     } catch (err) {
       this.props.changeLoading(false);
       console.log(err);
@@ -80,7 +82,8 @@ class Home extends React.Component<any, StateType> {
 
 const mapDispatchToProps = {
   changeLoading,
-  initTodo
+  initTodo,
+  initTomatoes
 };
 
 export default connect(
