@@ -7,6 +7,7 @@ import Todos from 'src/components/todos/todos';
 import Tomatoes from 'src/components/Tomatoes/Tomatoes';
 import { connect } from 'react-redux';
 import { changeLoading, initTodo, initTomatoes } from '../../redux/actions';
+import logo from 'src/static/lgm.png';
 
 interface StateType {
   user: any;
@@ -64,7 +65,10 @@ class Home extends React.Component<any, StateType> {
     return (
       <div className="home">
         <header>
-          <span className="title">老干妈计时法</span>
+          <div className="titleLeft">
+            <img src={logo} alt="" className="logo" />
+            <span className="title">老干妈计时法</span>
+          </div>
           <Dropdown overlay={menu} trigger={['click']}>
             <a className="ant-dropdown-link" href="#">
               {account} <Icon type="down" />

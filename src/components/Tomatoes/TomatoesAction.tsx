@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { Button, Input, Icon } from 'antd';
+import { Button, Input, Icon, Modal } from 'antd';
 import axios from '../../axios/axios';
 import './TomatoesAction.scss';
 import { connect } from 'react-redux';
 import { addTomato, updateTomatoes } from '../../redux/actions';
 import CountDown from './CountDown';
+
+const { confirm } = Modal;
 
 interface StateType {
   description: string;
@@ -31,6 +33,17 @@ class TomatoesAction extends React.Component<ActionProps, StateType> {
       console.log(err);
     }
   }
+  showDeleteConfirm() {
+    confirm({
+      title: '您目前正在炒一个老干妈，要放弃这个老干妈?',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk: () => {
+        this.abortTomato();
+      }
+    });
+  }
   abortTomato() {
     this.updateTomato({ aborted: true });
   }
@@ -41,6 +54,8 @@ class TomatoesAction extends React.Component<ActionProps, StateType> {
         params
       );
       this.props.updateTomatoes(res.data.resource);
+      document.title = '老干妈计时法';
+      this.setState({ description: '' });
     } catch (err) {
       console.log(err);
     }
@@ -58,6 +73,9 @@ class TomatoesAction extends React.Component<ActionProps, StateType> {
       (n: any) => !n.description && !n.aborted && !n.ended_at
     )[0];
   }
+  onFinshed() {
+    this.forceUpdate();
+  }
   render() {
     let action = <div />;
     const unCompleteTomato = this.unCompleteTomato();
@@ -65,8 +83,7 @@ class TomatoesAction extends React.Component<ActionProps, StateType> {
       action = (
         <Button
           className="actionBtn"
-          // onClick={() => this.actionStart(1000 * 60 * 25)}
-          onClick={() => this.actionStart(10000)}
+          onClick={() => this.actionStart(1000 * 60 * 25)}
         >
           开始炒老干妈
         </Button>
@@ -88,7 +105,7 @@ class TomatoesAction extends React.Component<ActionProps, StateType> {
             <Icon
               type="close-circle"
               className="closeTomato"
-              onClick={() => this.abortTomato()}
+              onClick={() => this.showDeleteConfirm()}
             />
           </div>
         );
@@ -96,11 +113,15 @@ class TomatoesAction extends React.Component<ActionProps, StateType> {
         const timer = duration - (endTime - startTime);
         action = (
           <div className="countDownWrapper">
-            <CountDown timer={timer} />
+            <CountDown
+              timer={timer}
+              onFinshed={() => this.onFinshed()}
+              duration={duration}
+            />
             <Icon
               type="close-circle"
               className="closeTomato"
-              onClick={() => this.abortTomato()}
+              onClick={() => this.showDeleteConfirm()}
             />
           </div>
         );

@@ -4,6 +4,7 @@ import * as React from 'react';
 import './todos.scss';
 import { Button, Icon } from 'antd';
 import { connect } from 'react-redux';
+import NoHistory from '../Tomatoes/NoHistory';
 
 interface TodoProps {
   todoList: any[];
@@ -23,10 +24,10 @@ class Todos extends React.Component<TodoProps, StateType> {
   unDeleteList() {
     return this.props.todoList.filter(l => !l.deleted);
   }
-  compeleteList() {
+  get compeleteList() {
     return this.unDeleteList().filter(l => l.completed);
   }
-  unCompeleteList() {
+  get unCompeleteList() {
     return this.unDeleteList().filter(l => !l.completed);
   }
   changeShow() {
@@ -37,18 +38,26 @@ class Todos extends React.Component<TodoProps, StateType> {
     return (
       <div className="todoList">
         <TodoInput />
-        <div className="item">
-          {this.unCompeleteList().map(n => {
-            return <TodoItem {...n} key={n.id} />;
-          })}
-        </div>
-        <Button className="changeBtn" onClick={() => this.changeShow()}>
-          {showCompleted ? <Icon type="down" /> : <Icon type="right" />}
-          最近完成任务
-        </Button>
+        {this.unCompeleteList.length ? (
+          <div className="item">
+            {this.unCompeleteList.map(n => {
+              return <TodoItem {...n} key={n.id} />;
+            })}
+          </div>
+        ) : (
+          <NoHistory />
+        )}
+        {this.compeleteList.length ? (
+          <Button className="changeBtn" onClick={() => this.changeShow()}>
+            {showCompleted ? <Icon type="down" /> : <Icon type="right" />}
+            最近完成任务
+          </Button>
+        ) : (
+          <span />
+        )}
         <div className="item">
           {showCompleted ? (
-            this.compeleteList().map(n => {
+            this.compeleteList.map(n => {
               return <TodoItem {...n} key={n.id} />;
             })
           ) : (

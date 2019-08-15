@@ -1,0 +1,16 @@
+.NoHistory {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 16px;
+  padding-top: 32px;
+  i {
+    font-size: 80px;
+    color: #ddd;
+  }
+  span {
+    margin: 16px;
+    color: #999;
+  }
+}

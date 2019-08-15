@@ -8,9 +8,17 @@
     border-bottom: 1px solid #ddd;
     align-items: center;
     justify-content: space-between;
-    .title {
-      font-weight: bold;
-      font-size: 22px;
+    .titleLeft {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .logo {
+        height: 35px;
+      }
+      .title {
+        font-weight: bold;
+        font-size: 22px;
+      }
     }
     a {
       color: #333;
