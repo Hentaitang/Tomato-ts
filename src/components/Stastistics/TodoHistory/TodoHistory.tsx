@@ -17,6 +17,7 @@ interface TodoHistoryProps {
 interface StateType {
   showCompleteTodos: any[];
   showDeleteTodos: any[];
+  page: number;
 }
 
 class TodoHistory extends React.Component<TodoHistoryProps, StateType> {
@@ -24,7 +25,8 @@ class TodoHistory extends React.Component<TodoHistoryProps, StateType> {
     super(props);
     this.state = {
       showCompleteTodos: [],
-      showDeleteTodos: []
+      showDeleteTodos: [],
+      page: 1
     };
   }
   get completeTodo() {
@@ -70,6 +72,11 @@ class TodoHistory extends React.Component<TodoHistoryProps, StateType> {
     try {
       const res = await axios.put(`todos/${id}`, params);
       this.props.updateTodos(res.data.resource);
+      if (params.deleted) {
+        this.completePageChange(this.state.page);
+      } else {
+        this.deletePageChange(this.state.page);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -78,6 +85,7 @@ class TodoHistory extends React.Component<TodoHistoryProps, StateType> {
     const startIndex = (page - 1) * 10;
     this.setState({
       ...this.state,
+      page,
       showDeleteTodos: this.deleteTodo.slice(startIndex, startIndex + 10)
     });
   }
@@ -85,11 +93,13 @@ class TodoHistory extends React.Component<TodoHistoryProps, StateType> {
     const startIndex = (page - 1) * 3;
     this.setState({
       ...this.state,
+      page,
       showCompleteTodos: this.orderGroupTodo.slice(startIndex, startIndex + 3)
     });
   }
   componentDidMount() {
     this.setState({
+      page: 1,
       showCompleteTodos: this.orderGroupTodo.slice(0, 3),
       showDeleteTodos: this.deleteTodo.slice(0, 10)
     });
@@ -101,48 +111,50 @@ class TodoHistory extends React.Component<TodoHistoryProps, StateType> {
         <Tabs type="card">
           <TabPane tab="已完成的任务" key="1">
             {showCompleteTodos.map(t => {
-              return (
-                <div key={t} className="dateWrapper">
-                  <div className="title">
-                    <span className="dateTime">{format(t, 'MM月DD日')}</span>
-                    <span className="weekDay">{this.formatWeek(t)}</span>
-                    <div className="total">
-                      完成了{this.groupTodo[t].length}个任务
+              {
+                return this.groupTodo[t] ? (
+                  <div key={t} className="dateWrapper">
+                    <div className="title">
+                      <span className="dateTime">{format(t, 'MM月DD日')}</span>
+                      <span className="weekDay">{this.formatWeek(t)}</span>
+                      <div className="total">
+                        完成了{this.groupTodo[t].length}个任务
+                      </div>
+                    </div>
+                    <div className="itemList">
+                      {this.groupTodo[t].map(l => {
+                        return (
+                          <div className="todoItem" key={l.id}>
+                            <span className="todoDateTime">
+                              {format(l.completed_at, 'HH:mm')}
+                            </span>
+                            <span className="todoDesc">{l.description}</span>
+                            <div className="todoActionWrapper">
+                              <span
+                                onClick={() =>
+                                  this.update(l.id, {
+                                    completed: false,
+                                    deleted: false
+                                  })
+                                }
+                              >
+                                恢复
+                              </span>
+                              <span
+                                onClick={() =>
+                                  this.update(l.id, { deleted: true })
+                                }
+                              >
+                                删除
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
-                  <div className="itemList">
-                    {this.groupTodo[t].map(l => {
-                      return (
-                        <div className="todoItem" key={l.id}>
-                          <span className="todoDateTime">
-                            {format(l.completed_at, 'HH:mm')}
-                          </span>
-                          <span className="todoDesc">{l.description}</span>
-                          <div className="todoActionWrapper">
-                            <span
-                              onClick={() =>
-                                this.update(l.id, {
-                                  completed: false,
-                                  deleted: false
-                                })
-                              }
-                            >
-                              恢复
-                            </span>
-                            <span
-                              onClick={() =>
-                                this.update(l.id, { deleted: true })
-                              }
-                            >
-                              删除
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
+                ) : null;
+              }
             })}
             <div className="paginationWrapper">
               <Pagination

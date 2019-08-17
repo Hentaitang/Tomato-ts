@@ -51,7 +51,7 @@ class Stastistics extends React.Component<StastisticsProps, StateType> {
     return (
       <div className="stastistics">
         <ul className="stastisticsTabs">
-          <li
+          {/* <li
             className={className({
               active: active === 1,
               stastisticsItem: true
@@ -64,11 +64,12 @@ class Stastistics extends React.Component<StastisticsProps, StateType> {
               <span className="subTitle">8月累计</span>
               <span className="quantity">4</span>
             </div>
-          </li>
+          </li> */}
           <li
-            onClick={() => this.changeActive(2)}
+            onClick={() => this.changeActive(1)}
+            ref={li => (this.liNode = li)}
             className={className({
-              active: active === 2,
+              active: active === 1,
               stastisticsItem: true
             })}
           >
@@ -80,9 +81,9 @@ class Stastistics extends React.Component<StastisticsProps, StateType> {
             <StastisticsSvg list={this.finishTomatoList} width={width} />
           </li>
           <li
-            onClick={() => this.changeActive(3)}
+            onClick={() => this.changeActive(2)}
             className={className({
-              active: active === 3,
+              active: active === 2,
               stastisticsItem: true
             })}
           >
@@ -95,9 +96,9 @@ class Stastistics extends React.Component<StastisticsProps, StateType> {
           </li>
         </ul>
         <div className="historyWrapper">
-          {active === 1 ? null : null}
-          {active === 2 ? <TomatoHistory /> : null}
-          {active === 3 ? <TodoHistory /> : null}
+          {/* {active === 1 ? null : null} */}
+          {active === 1 ? <TomatoHistory /> : null}
+          {active === 2 ? <TodoHistory /> : null}
         </div>
       </div>
     );

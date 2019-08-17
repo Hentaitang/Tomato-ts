@@ -5,18 +5,19 @@ import _ from 'lodash';
 import { format } from 'date-fns';
 import { connect } from 'react-redux';
 import axios from 'src/axios/axios';
-// import { updateTodos } from 'src/redux/actions';
+import { updateTomatoes } from 'src/redux/actions';
 
 const { TabPane } = Tabs;
 
 interface TodoHistoryProps {
   tomatoList: any[];
-  // updateTodos: (payload: any) => void;
+  updateTomatoes: (payload: any) => void;
 }
 
 interface StateType {
   showCompleteTodos: any[];
   showDeleteTodos: any[];
+  page: number;
 }
 
 class TomatoHistory extends React.Component<TodoHistoryProps, StateType> {
@@ -24,7 +25,8 @@ class TomatoHistory extends React.Component<TodoHistoryProps, StateType> {
     super(props);
     this.state = {
       showCompleteTodos: [],
-      showDeleteTodos: []
+      showDeleteTodos: [],
+      page: 1
     };
   }
   get completeTodo() {
@@ -66,13 +68,14 @@ class TomatoHistory extends React.Component<TodoHistoryProps, StateType> {
     return week;
   }
   async update(id: number, params: any) {
-    if (params.completed) {
-      params.ended_at = new Date();
-    }
     try {
-      const res = await axios.put(`todos/${id}`, params);
-      console.log(res);
-      // this.props.updateTodos(res.data.resource);
+      const res = await axios.put(`tomatoes/${id}`, params);
+      this.props.updateTomatoes(res.data.resource);
+      if (params.aborted) {
+        this.completePageChange(this.state.page);
+      } else {
+        this.deletePageChange(this.state.page);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -81,6 +84,7 @@ class TomatoHistory extends React.Component<TodoHistoryProps, StateType> {
     const startIndex = (page - 1) * 10;
     this.setState({
       ...this.state,
+      page,
       showDeleteTodos: this.abortedTodo.slice(startIndex, startIndex + 10)
     });
   }
@@ -88,11 +92,13 @@ class TomatoHistory extends React.Component<TodoHistoryProps, StateType> {
     const startIndex = (page - 1) * 3;
     this.setState({
       ...this.state,
+      page,
       showCompleteTodos: this.orderGroupTodo.slice(startIndex, startIndex + 3)
     });
   }
   componentDidMount() {
     this.setState({
+      page: 1,
       showCompleteTodos: this.orderGroupTodo.slice(0, 3),
       showDeleteTodos: this.abortedTodo.slice(0, 10)
     });
@@ -104,48 +110,41 @@ class TomatoHistory extends React.Component<TodoHistoryProps, StateType> {
         <Tabs type="card">
           <TabPane tab="已完成的老干妈" key="1">
             {showCompleteTodos.map(t => {
-              return (
-                <div key={t} className="dateWrapper">
-                  <div className="title">
-                    <span className="dateTime">{format(t, 'MM月DD日')}</span>
-                    <span className="weekDay">{this.formatWeek(t)}</span>
-                    <div className="total">
-                      完成了{this.groupTodo[t].length}个老干妈
+              {
+                return this.groupTodo[t] ? (
+                  <div key={t} className="dateWrapper">
+                    <div className="title">
+                      <span className="dateTime">{format(t, 'MM月DD日')}</span>
+                      <span className="weekDay">{this.formatWeek(t)}</span>
+                      <div className="total">
+                        炒好了{this.groupTodo[t].length}份老干妈
+                      </div>
+                    </div>
+                    <div className="itemList">
+                      {this.groupTodo[t].map(l => {
+                        return (
+                          <div className="todoItem" key={l.id}>
+                            <span className="todoDateTime">
+                              {format(l.started_at, 'HH:mm')}-
+                              {format(l.ended_at, 'HH:mm')}
+                            </span>
+                            <span className="todoDesc">{l.description}</span>
+                            <div className="todoActionWrapper">
+                              <span
+                                onClick={() =>
+                                  this.update(l.id, { aborted: true })
+                                }
+                              >
+                                删除
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
-                  <div className="itemList">
-                    {this.groupTodo[t].map(l => {
-                      return (
-                        <div className="todoItem" key={l.id}>
-                          <span className="todoDateTime">
-                            {format(l.ended_at, 'HH:mm')}
-                          </span>
-                          <span className="todoDesc">{l.description}</span>
-                          <div className="todoActionWrapper">
-                            <span
-                              onClick={() =>
-                                this.update(l.id, {
-                                  completed: false,
-                                  deleted: false
-                                })
-                              }
-                            >
-                              恢复
-                            </span>
-                            <span
-                              onClick={() =>
-                                this.update(l.id, { deleted: true })
-                              }
-                            >
-                              删除
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
+                ) : null;
+              }
             })}
             <div className="paginationWrapper">
               <Pagination
@@ -173,7 +172,10 @@ class TomatoHistory extends React.Component<TodoHistoryProps, StateType> {
                     <span
                       className="deleteTodoAction"
                       onClick={() =>
-                        this.update(t.id, { completed: false, deleted: false })
+                        this.update(t.id, {
+                          aborted: false,
+                          ended_at: t.ended_at ? t.ended_at : new Date()
+                        })
                       }
                     >
                       恢复
@@ -204,11 +206,11 @@ const mapStateToProp = (state: any) => {
   };
 };
 
-// const mapDispatchToProps = {
-//   updateTodos
-// };
+const mapDispatchToProps = {
+  updateTomatoes
+};
 
 export default connect(
-  mapStateToProp
-  // mapDispatchToProps
+  mapStateToProp,
+  mapDispatchToProps
 )(TomatoHistory);
