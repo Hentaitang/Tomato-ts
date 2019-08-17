@@ -31,7 +31,7 @@ class Todos extends React.Component<TodoProps, StateType> {
           +new Date() - Date.parse(l.completed_at) < 1000 * 60 * 60 * 24 * 3;
         return l.completed && filterTime;
       })
-      .splice(0, 10);
+      .slice(0, 10);
   }
   get unCompeleteList() {
     return this.unDeleteList().filter(l => !l.completed);

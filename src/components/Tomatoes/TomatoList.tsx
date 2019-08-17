@@ -61,7 +61,7 @@ class TomatoList extends React.Component<TomatoListProps> {
                   </span>
                 </div>
                 <InnerTomatoes
-                  tomatoes={this.completeTomatoes[t].splice(0, 3)}
+                  tomatoes={this.completeTomatoes[t].slice(0, 3)}
                 />
               </div>
             );

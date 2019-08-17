@@ -2,6 +2,9 @@ import * as React from 'react';
 import './Stastistics.scss';
 import { connect } from 'react-redux';
 import StastisticsSvg from './StastisticsSvg';
+import TodoHistory from './TodoHistory/TodoHistory';
+import TomatoHistory from './TomatoHistory/TomatoHistory';
+import className from 'classnames';
 
 interface StastisticsProps {
   todoList: any[];
@@ -10,6 +13,7 @@ interface StastisticsProps {
 
 interface StateType {
   width: number;
+  active: number;
 }
 
 class Stastistics extends React.Component<StastisticsProps, StateType> {
@@ -17,7 +21,8 @@ class Stastistics extends React.Component<StastisticsProps, StateType> {
   constructor(props: StastisticsProps) {
     super(props);
     this.state = {
-      width: 0
+      width: 0,
+      active: 0
     };
   }
   componentDidMount() {
@@ -34,40 +39,66 @@ class Stastistics extends React.Component<StastisticsProps, StateType> {
       l => l.ended_at && l.description && !l.aborted
     );
   }
+  changeActive(active: number) {
+    if (active === this.state.active) {
+      this.setState({ ...this.state, active: 0 });
+    } else {
+      this.setState({ ...this.state, active });
+    }
+  }
   render() {
+    const { width, active } = this.state;
     return (
       <div className="stastistics">
-        <ul>
-          <li ref={li => (this.liNode = li)}>
+        <ul className="stastisticsTabs">
+          <li
+            className={className({
+              active: active === 1,
+              stastisticsItem: true
+            })}
+            ref={li => (this.liNode = li)}
+            onClick={() => this.changeActive(1)}
+          >
             <div className="description">
               <span className="title">统计</span>
               <span className="subTitle">8月累计</span>
               <span className="quantity">4</span>
             </div>
           </li>
-          <li>
+          <li
+            onClick={() => this.changeActive(2)}
+            className={className({
+              active: active === 2,
+              stastisticsItem: true
+            })}
+          >
             <div className="description">
               <span className="title">老干妈历史</span>
               <span className="subTitle">累计完成老干妈</span>
               <span className="quantity">{this.finishTomatoList.length}</span>
             </div>
-            <StastisticsSvg
-              list={this.finishTomatoList}
-              width={this.state.width}
-            />
+            <StastisticsSvg list={this.finishTomatoList} width={width} />
           </li>
-          <li>
+          <li
+            onClick={() => this.changeActive(3)}
+            className={className({
+              active: active === 3,
+              stastisticsItem: true
+            })}
+          >
             <div className="description">
               <span className="title">任务历史</span>
               <span className="subTitle">累计完成任务</span>
               <span className="quantity">{this.finishTodoList.length}</span>
             </div>
-            <StastisticsSvg
-              list={this.finishTodoList}
-              width={this.state.width}
-            />
+            <StastisticsSvg list={this.finishTodoList} width={width} />
           </li>
         </ul>
+        <div className="historyWrapper">
+          {active === 1 ? null : null}
+          {active === 2 ? <TomatoHistory /> : null}
+          {active === 3 ? <TodoHistory /> : null}
+        </div>
       </div>
     );
   }

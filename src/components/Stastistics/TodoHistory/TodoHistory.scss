@@ -1,0 +1,100 @@
+.todoHistory {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  margin-bottom: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 0 hsla(0, 0%, 88%, 0.2);
+  .dateWrapper {
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 12px;
+    padding: 14px;
+    display: flex;
+    .title {
+      color: #888;
+      flex: 1.2;
+      .dateTime {
+        color: #222;
+        margin-right: 8px;
+      }
+      .total {
+        margin-top: 8px;
+      }
+    }
+    .itemList {
+      flex: 2.8;
+      .todoItem {
+        padding: 8px 66px 8px 8px;
+        position: relative;
+        &:hover {
+          background: #f4f4f4;
+          .todoActionWrapper {
+            display: block;
+          }
+        }
+        .todoDateTime {
+          color: #888;
+          margin-right: 12px;
+        }
+        .todoDesc {
+          color: #222;
+        }
+        .todoActionWrapper {
+          position: absolute;
+          top: 50%;
+          right: 0;
+          transform: translateY(-50%);
+          display: none;
+          span {
+            margin-right: 8px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+  .deleteWrapper {
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 12px;
+    padding: 14px;
+    .deleteTodoItem {
+      padding: 8px 66px 8px 8px;
+      position: relative;
+      &:hover {
+        background: #f4f4f4;
+        .deleteTodoAction {
+          display: block;
+        }
+      }
+      .deleteTodoTime {
+        color: #888;
+        margin-right: 12px;
+      }
+      .deleteTodoDesc {
+        color: #222;
+      }
+      .deleteTodoAction {
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        display: none;
+        cursor: pointer;
+      }
+    }
+  }
+  .paginationWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 16px 0;
+    .totle {
+      color: #888;
+    }
+  }
+}
