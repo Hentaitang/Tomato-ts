@@ -19,6 +19,9 @@
       }
       &:hover {
         background: rgba(0, 0, 0, 0.12);
+        .text i {
+          display: block;
+        }
       }
       &.edited {
         background-color: #f7edb8;
@@ -30,9 +33,27 @@
       .ant-checkbox-inner {
         border-radius: 50%;
       }
+      .ant-checkbox-checked {
+        &::after {
+          border: none;
+        }
+        .ant-checkbox-inner {
+          background-color: rgba(215, 78, 78, 0.5);
+          border-color: rgba(215, 78, 78, 0.5);
+        }
+      }
       .text {
         padding: 0 8px;
         flex: 1;
+        position: relative;
+        i {
+          position: absolute;
+          right: 8px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #a9a9a9;
+          display: none;
+        }
       }
       .editing {
         display: flex;

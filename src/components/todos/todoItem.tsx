@@ -18,14 +18,26 @@ interface StateType {
 }
 
 class TodoItem extends React.Component<TodoItemProps, StateType> {
+  inputText: any;
   constructor(props: TodoItemProps) {
     super(props);
+    this.inputText = React.createRef();
     this.state = {
       inputValue: this.props.description
     };
   }
 
+  changeEditing(id: number) {
+    this.props.changeEditing(id);
+    setTimeout(() => {
+      this.inputText.current.focus();
+    }, 100);
+  }
+
   async update(id: number, params: any) {
+    if (params.completed) {
+      params.completed_at = new Date();
+    }
     try {
       const res = await axios.put(`todos/${id}`, params);
       this.props.updateTodos(res.data.resource);
@@ -47,14 +59,21 @@ class TodoItem extends React.Component<TodoItemProps, StateType> {
     const { inputValue } = this.state;
 
     const Text = (
-      <span className="text" onDoubleClick={() => this.props.changeEditing(id)}>
+      <span className="text" onDoubleClick={() => this.changeEditing(id)}>
         {description}
+        <Icon
+          type="delete"
+          theme="filled"
+          title="删除"
+          onClick={() => this.update(id, { deleted: true })}
+        />
       </span>
     );
 
     const Editing = (
       <div className="editing">
         <input
+          ref={this.inputText}
           type="text"
           value={inputValue}
           onKeyUp={e => this.updateDescription(e)}

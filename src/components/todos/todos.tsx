@@ -25,7 +25,13 @@ class Todos extends React.Component<TodoProps, StateType> {
     return this.props.todoList.filter(l => !l.deleted);
   }
   get compeleteList() {
-    return this.unDeleteList().filter(l => l.completed);
+    return this.unDeleteList()
+      .filter(l => {
+        const filterTime =
+          +new Date() - Date.parse(l.completed_at) < 1000 * 60 * 60 * 24 * 3;
+        return l.completed && filterTime;
+      })
+      .splice(0, 10);
   }
   get unCompeleteList() {
     return this.unDeleteList().filter(l => !l.completed);

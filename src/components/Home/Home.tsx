@@ -5,6 +5,7 @@ import history from 'src/axios/history';
 import './Home.scss';
 import Todos from 'src/components/todos/todos';
 import Tomatoes from 'src/components/Tomatoes/Tomatoes';
+import Stastistics from 'src/components/Stastistics/Stastistics';
 import { connect } from 'react-redux';
 import { changeLoading, initTodo, initTomatoes } from '../../redux/actions';
 import logo from 'src/static/lgm.png';
@@ -79,6 +80,7 @@ class Home extends React.Component<any, StateType> {
           <Tomatoes />
           <Todos />
         </main>
+        <Stastistics />
       </div>
     );
   }
