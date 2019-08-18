@@ -25,6 +25,5 @@
    ![登陆](https://i.loli.net/2019/08/18/rVTuXbgkc69lpe5.png)
    ![注册](https://i.loli.net/2019/08/18/8PKn4a3dLoH6IJG.png)
 2. 老干妈列表 & 任务列表
-   ![tomatoes&todos.png](https://i.loli.net/2019/04/13/5cb198dc32823.png)
    ![tomatoes&todos](https://i.loli.net/2019/08/18/68YeNRmZvpFbCgK.png)
    ![svg-list](https://i.loli.net/2019/08/18/rWsbQ9IB7TFiXMp.png)
