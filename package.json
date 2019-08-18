@@ -2,7 +2,7 @@
   "name": "tomato-ts",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://github.com/Hentaitang/Tomato-ts",
+  "homepage": "https://hentaitang.github.io/Tomato-ts",
   "dependencies": {
     "@types/classnames": "^2.2.9",
     "@types/react-redux": "^7.1.1",

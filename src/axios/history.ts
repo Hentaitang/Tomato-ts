@@ -10,4 +10,8 @@ if (ENV === 'development') {
   publicUrl = '/Tomato-ts';
 }
 
-export default createBrowserHistory({ basename: publicUrl });
+const history = createBrowserHistory({
+  basename: publicUrl
+});
+
+export default history;

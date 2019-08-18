@@ -30,6 +30,7 @@ const menu = (
 function login(e: any) {
   if (e.key === '1') {
     localStorage.setItem('x-token', '');
+    document.title = '老干妈计时法';
     history.push('/login');
   }
 }
